@@ -275,7 +275,7 @@ function setTime(time){
     clearInterval(timer)
   }
 }
-setTime(10);
+//setTime(10);
 
 /**
  * 11、监听事件封装
@@ -305,3 +305,52 @@ function removeEventHandler(target,type,func){
     delete target["on"+ type]
   }
 }
+
+/**
+ * 12】对象合并，并记录异常数据
+ */
+let info1 = {
+        name:'xy',
+        sex:'男',
+        age:24,
+        job:'web前端'
+},info2 = {
+  name:'xy',
+  country:'china',
+  age:18,
+  phone:'10086',
+  job:'web前端'
+}
+let objAll = {};
+function  assignObj(objArr){
+  let _obj = {};
+  for(let i = 0; i < objArr.length;i++){
+    _obj = Object.assign(_obj,objArr[i],{});
+  }
+   return JSON.parse(JSON.stringify(_obj));
+  //JSON.parse()方法用于将一个JON字符串转换为对象
+  //JSON.parse(text[,reviver])
+  //text；必需，一个有效的JSON字符串
+  //reviver：可选，一个转换结果的函数，将为对象的每个成员调用此函数
+  //JSON.stringify()方法是将一个对象或者数组转换成一个JSON字符串。
+};
+objAll = assignObj([info1,info2]);
+//准备一个字段，记录哪些数据异常
+objAll.warnInfo = [];
+//检查对象，判断哪些数据异常
+function checkObj(_objAll,objList){
+  //获取所有属性
+  let _keys = Object.keys(_objAll);
+  //Object.keys()方法返回一个由一个给定对象的自身可枚举属性组成的数组
+  //console.log(_keys)
+  for(let i = 0;i < objList.length;i++){
+    for(let j = 0; j < _keys.length;j++){
+      //如果_keys[j]这个属性，在objList[i]和_objAll中都存在，而且值不一样，就是异常数据，需要记录
+      if(objList[i][_keys[j]] !== undefined&&_objAll[_keys[j]] !== objList[i][_keys[j]]){
+        objAll.warnInfo.push(_keys[j]);
+      }
+    }
+  }
+  return _objAll;
+}
+console.log(checkObj(objAll,[info1,info2]))
