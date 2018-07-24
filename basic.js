@@ -100,4 +100,28 @@ function fn2(n){
   return fn2(n - 1) + fn2(n - 2)
 }
 console.log(fn(10),count);
-console.log(fn2(10),count2)
+console.log(fn2(10),count2);
+/**
+ * 7、汉字与unicode码转换
+ */
+//7.1汉字转unicode码
+function tounicode(data){
+  if(data== '')return 'sb'
+  var str = '';
+  for(var i = 0;i < data.length;i++){
+    str += "\\u"+parseInt(data[i].charCodeAt(0),10).toString(16)
+  }
+
+  return str;
+}
+//7.2unicode码转汉字
+function tohanzi(data){
+  if(data == '') return '请输入十六进制unicode';
+  data = data.split("\\u");
+  var str ='';
+  for(var i=0;i<data.length;i++)
+  {
+      str+=String.fromCharCode(parseInt(data[i],16).toString(10));
+  }
+  return str;
+}
